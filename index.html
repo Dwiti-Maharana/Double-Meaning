@@ -1,0 +1,466 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Odia Viral GK Quiz</title>
+    <style>
+        /* Import a nice font */
+        @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap');
+
+        /* Color variables for easy customization */
+        :root {
+            --bg-dark: #10141f;
+            --primary-text: #ffffff;
+            --cyan-glow: #00ffff;
+            --red-glow: #ff1b4b;
+            --purple-glow: #c63dff;
+            --gold-glow: #ffb700;
+            --green-glow: #00ff6a;
+        }
+
+        /* Basic setup */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            background-color: var(--bg-dark);
+            background-image:
+                radial-gradient(circle at 10% 10%, rgba(255, 255, 255, 0.04) 1px, transparent 1px),
+                radial-gradient(circle at 80% 90%, rgba(255, 255, 255, 0.04) 1px, transparent 1px);
+            color: var(--primary-text);
+            padding: 20px;
+        }
+
+        /* Main container with gold glowing border */
+        .quiz-container {
+            width: 100%;
+            max-width: 1100px;
+            background-color: #1a1f36;
+            border-radius: 20px;
+            padding: 40px 35px;
+            border: 2px solid var(--gold-glow);
+            box-shadow: 0 0 15px var(--gold-glow);
+            animation: glow-gold 2s infinite alternate;
+        }
+
+        /* Header section */
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 30px;
+            font-weight: 600;
+            font-size: 1.1rem;
+        }
+
+        .center-controls {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        /* --- Timer circle styles with hover effect --- */
+        .timer-circle {
+            width: 60px;
+            height: 60px;
+            border: 3px solid var(--cyan-glow);
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 1.8rem;
+            font-weight: 700;
+            color: var(--cyan-glow);
+            cursor: pointer;
+            transition: transform 0.2s;
+        }
+
+        .timer-circle:hover {
+            transform: scale(1.1);
+        }
+        
+        /* --- START: NEW CSS CLASS FOR KEY PRESS ANIMATION --- */
+        .timer-circle.active-pulse {
+            transform: scale(1.1);
+        }
+        /* --- END: NEW CSS CLASS --- */
+
+
+        /* --- Next Question button styles with hover effect --- */
+        #next-btn {
+            background-color: var(--cyan-glow);
+            color: #10141f;
+            border: none;
+            border-radius: 10px;
+            padding: 10px 20px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: background-color 0.3s, box-shadow 0.3s, transform 0.2s; /* Added transform */
+        }
+
+        #next-btn:hover {
+            background-color: #00e0e0;
+            box-shadow: 0 0 15px var(--cyan-glow);
+            transform: scale(1.05); /* Added for extra effect */
+        }
+        
+        /* --- START: NEW CSS CLASS FOR KEY PRESS ANIMATION --- */
+        #next-btn.active-pulse {
+            background-color: #00e0e0;
+            box-shadow: 0 0 15px var(--cyan-glow);
+            transform: scale(1.05);
+        }
+        /* --- END: NEW CSS CLASS --- */
+
+
+        /* Question Box with red glowing border */
+        .question-box {
+            background-color: #0d0f1a;
+            border-radius: 15px;
+            padding: 40px 20px;
+            margin-bottom: 30px;
+            text-align: center;
+            font-size: 2.8rem;
+            font-weight: 700;
+            min-height: 160px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            border: 2px solid var(--red-glow);
+            box-shadow: 0 0 15px var(--red-glow);
+            animation: glow-red 2.5s infinite alternate;
+        }
+
+        /* Answer Area */
+        .answer-area {
+            position: relative;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin-bottom: 10px;
+        }
+
+        /* Answer Box base style */
+        .answer-box {
+            background-color: #0d0f1a;
+            border-radius: 15px;
+            padding: 20px;
+            width: 50%;
+            min-height: 120px;
+            text-align: center;
+            font-size: 2.4rem;
+            font-weight: 700;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            transition: border-color 0.5s, box-shadow 0.5s;
+            border: 2px solid var(--purple-glow);
+            box-shadow: 0 0 15px var(--purple-glow);
+            animation: glow-purple 1.5s infinite alternate;
+        }
+
+        .answer-box.answer-revealed {
+            border-color: var(--green-glow);
+            box-shadow: 0 0 15px var(--green-glow);
+            animation: glow-green 1.5s infinite alternate;
+        }
+
+        .video-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            background-color: rgba(0, 0, 0, 0.85);
+            display: none;
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+        }
+        
+        #funny-video {
+            max-width: 80%;
+            max-height: 80%;
+            border: 4px solid var(--cyan-glow);
+            border-radius: 15px;
+            box-shadow: 0 0 25px var(--cyan-glow);
+            animation: glow-cyan 1.8s infinite alternate;
+        }
+
+        /* Keyframe animations */
+        @keyframes glow-gold { from { box-shadow: 0 0 10px var(--gold-glow), 0 0 20px var(--gold-glow); } to { box-shadow: 0 0 20px var(--gold-glow), 0 0 30px var(--gold-glow); } }
+        @keyframes glow-red { from { box-shadow: 0 0 10px var(--red-glow), 0 0 20px var(--red-glow); } to { box-shadow: 0 0 20px var(--red-glow), 0 0 30px var(--red-glow); } }
+        @keyframes glow-purple { from { box-shadow: 0 0 10px var(--purple-glow), 0 0 20px var(--purple-glow); } to { box-shadow: 0 0 20px var(--purple-glow), 0 0 30px var(--purple-glow); } }
+        @keyframes glow-green { from { box-shadow: 0 0 10px var(--green-glow), 0 0 20px var(--green-glow); } to { box-shadow: 0 0 20px var(--green-glow), 0 0 30px var(--green-glow); } }
+        @keyframes glow-cyan { from { box-shadow: 0 0 20px var(--cyan-glow), 0 0 30px var(--cyan-glow); } to { box-shadow: 0 0 30px var(--cyan-glow), 0 0 45px var(--cyan-glow); } }
+
+    </style>
+</head>
+<body>
+    
+    <div class="quiz-container">
+        <div class="header">
+            <span class="title">Odia-Viral GK</span>
+            <div class="center-controls">
+                <div class="timer-circle" id="timer-circle">
+                    <span id="timer">5</span>
+                </div>
+                <button id="next-btn">ପରବର୍ତ୍ତୀ ପ୍ରଶ୍ନ</button>
+            </div>
+            <span class="question-counter" id="question-counter">Question 1/20</span>
+        </div>
+
+        <div class="question-box" id="question-box">
+            QUESTION BOX
+        </div>
+
+        <div class="answer-area">
+            <div class="answer-box" id="answer-box">
+                ଉତ୍ତର?
+            </div>
+        </div>
+    </div>
+
+    <div id="video-overlay" class="video-overlay">
+        <video id="funny-video"></video>
+    </div>
+
+    <!-- Audio Files -->
+    <audio id="timer-sound" src="timer.mp3" preload="auto"></audio>
+    <audio id="answer-sound" src="ans_show.mp3" preload="auto"></audio>
+    <audio id="next-question-sound" src="next_question.mp3" preload="auto"></audio>
+    <audio id="background-music" src="" preload="auto"></audio>
+    <audio id="continuous-bg-music" src="background.mp3" loop preload="auto"></audio>
+
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+
+            const quizData = [
+              { question: "ଜଣେ ଲୋକ ଗାଧୋଇ ସାରିବା ପରେ କ'ଣ ହୋଇଯାଏ?", answer: "ସେ ଓଦା ହୋଇଯାଏ 😄" },
+              { question: "ଏମିତି କେଉଁ ଜାଗାକୁ ଲୋକେ ପ୍ରାୟତଃ ବିନା କପଡ଼ାରେ ଯାଆନ୍ତି?", answer: "ଗାଧୁଆ ଘର (ବାଥରୁମ୍) 🚿" },
+              { question: "କେଉଁ ଜିନିଷକୁ ଯେତେ ଟାଣିବ, ସେ ସେତେ ଲମ୍ବା ହେବ?", answer: "ରବର ବ୍ୟାଣ୍ଡ" },
+              { question: "ବାହାଘରର ପ୍ରଥମ ରାତିରେ ସ୍ତ୍ରୀ ତା' ସ୍ୱାମୀକୁ କ'ଣ ଦେଇଥାଏ?", answer: "ଏକ ଗ୍ଲାସ ଗରମ କ୍ଷୀର 🥛" },
+              { question: "ଏମିତି କ'ଣ ଜିନିଷ ଯାହାର କଣା ଅଛି, କିନ୍ତୁ ତାକୁ ଖୋଲିବାକୁ ହେଲେ ସେଥିରେ କିଛି ପୁରାଇବାକୁ ପଡ଼େ?", answer: "ତାଲା 🔑" },
+              { question: "ପୁରୁଷମାନଙ୍କର ଦୁଇ ଗୋଡ଼ ମଝିରେ କ'ଣ ଥାଏ ଯାହାକୁ ସେମାନେ ଚଲାନ୍ତି?", answer: "ବାଇକ୍ କିମ୍ବା ସାଇକେଲ୍ 🏍️" },
+              { question: "କେଉଁ ଜିନିଷ ପ୍ରଥମେ ଟାଣ ଥାଏ, କିନ୍ତୁ ଭିତରକୁ ଗଲା ପରେ ନରମ ହୋଇଯାଏ?", answer: "ଚା'ରେ ବୁଡ଼ା ଯାଇଥିବା ବିସ୍କୁଟ 🍪" },
+              { question: "ତାହା କ'ଣ ଯାହାକୁ ଲୋକମାନେ ରାତିରେ ଶୋଇବା ପୂର୍ବରୁ ବିଛଣାରେ କରିବାକୁ ଭଲ ପାଆନ୍ତି?", answer: "ବହି ପଢ଼ିବା କିମ୍ବା ମୋବାଇଲ୍ ଦେଖିବା 📖📱" },
+              { question: "ଶରୀରର କେଉଁ ଅଙ୍ଗ ଡରିଗଲେ ଠିଆ ହୋଇଯାଏ?", answer: "ଦେହର ଲୋମ 🥶" },
+              { question: "କେଉଁ ଜିନିଷ ଅନ୍ୟକୁ ଶୁଖାଇଲା ବେଳେ ନିଜେ ଓଦା ହୋଇଯାଏ?", answer: "ତଉଲିଆ (Towel) 🧖‍♀️" },
+              { question: "କାହାର ମୁଣ୍ଡ ଅଛି କିନ୍ତୁ ମଗଜ ନାହିଁ, ଆଉ ଘଷିଲେ ଜଳିଉଠେ?", answer: "ଦିଆସିଲି କାଠି 🔥" },
+              { question: "କେଉଁ ଜିନିଷର ଦେହ ସାରା କଣା, ତଥାପି ସେ ପାଣି ଧରି ରଖିପାରେ?", answer: "ସ୍ପଞ୍ଜ (Sponge) 🧽" },
+              { question: "ଝିଅମାନଙ୍କୁ କେଉଁ ଲମ୍ବା ଜିନିଷଟା ସବୁଠୁ ଅଧିକ ପସନ୍ଦ?", answer: "ଲମ୍ବା ବାଳ 💇‍♀️" },
+              { question: "ଦୁଇ ଜଣ ମିଶି କରନ୍ତି, କେବେ କେବେ ଚାରି ଜଣ ବି କରନ୍ତି, ଆଉ ବହୁତ ମଜା ଆସେ। ତାହା କ’ଣ?", answer: "ଲୁଡୁ ଖେଳ 🎲" },
+              { question: "ଝିଅମାନଙ୍କ ପାଖରେ ଏମିତି କ'ଣ ଅଛି ଯାହା ବାହାଘର ପରେ ବଡ଼ ହୋଇଯାଏ?", answer: "ସେମାନଙ୍କ ସାଙ୍ଗିଆ (Surname) 😉" },
+              { question: "ସ୍ୱାମୀ ନିଜ ସ୍ତ୍ରୀର କେଉଁ ଜିନିଷକୁ ଛୁଇଁପାରେ, କିନ୍ତୁ ଆଉ କେହି ଛୁଇଁ ପାରନ୍ତିନି?", answer: "ତାଙ୍କ ପାଦ 👣" },
+              { question: "ଏମିତି କିଏ ଯିଏ ରାତିରେ ବାହାରକୁ ଆସେ, କିନ୍ତୁ ଦିନ ହେଲେ ଲୁଚିଯାଏ?", answer: "ଆକାଶର ତାରା ✨" },
+              { question: "ପୁଅମାନଙ୍କ ପ୍ୟାଣ୍ଟ ଭିତରେ ଏମିତି କ’ଣ ଥାଏ ଯାହା ଝିଅମାନଙ୍କ ପାଖରେ ନଥାଏ?", answer: "ପକେଟ୍ (Pant Pocket) 😂" },
+              { question: "ଝିଅମାନେ କେଉଁ ଜିନିଷକୁ ପାଟିରେ ନେଇ ଖୋଲନ୍ତି?", answer: "କୋଲ୍ଡଡ୍ରିଙ୍କ୍ସ ବୋତଲ (ଦାନ୍ତରେ) 🥤" },
+              { question: "ଶରୀରର କେଉଁ ଅଙ୍ଗରେ ହାଡ଼ ନଥାଏ, କିନ୍ତୁ ତାହା ବହୁତ କାମ କରେ?", answer: "ଜିଭ 😋" }
+            ];            
+            const funnyVideoFiles = [];
+            for (let i = 1; i <= 15; i++) {
+                funnyVideoFiles.push(`video${i}.mp4`);
+            }
+            const funnyMusicFiles = [];
+            for (let i = 1; i <= 5; i++) {
+                funnyMusicFiles.push(`funny${i}.mp3`);
+            }
+
+            const questionBox = document.getElementById('question-box');
+            const answerBox = document.getElementById('answer-box');
+            const questionCounter = document.getElementById('question-counter');
+            const timerDisplay = document.getElementById('timer');
+            const timerCircle = document.getElementById('timer-circle');
+            const nextBtn = document.getElementById('next-btn');
+            const videoOverlay = document.getElementById('video-overlay');
+            const funnyVideo = document.getElementById('funny-video');
+
+            const timerSound = document.getElementById('timer-sound');
+            const answerSound = document.getElementById('answer-sound');
+            const nextQuestionSound = document.getElementById('next-question-sound');
+            const backgroundMusic = document.getElementById('background-music');
+            const continuousBgMusic = document.getElementById('continuous-bg-music');
+
+            let currentQuestionIndex = 0;
+            let countdown;
+            let timerInterval;
+            let isTimerActive = false;
+            let availableVideos = [];
+
+            function getRandomInt(max) {
+                return Math.floor(Math.random() * max);
+            }
+
+            function resetVideoList() {
+                availableVideos = [...funnyVideoFiles];
+            }
+
+            function loadQuestion() {
+                resetState();
+                if (currentQuestionIndex < quizData.length) {
+                    const currentQuestion = quizData[currentQuestionIndex];
+                    questionBox.textContent = currentQuestion.question;
+                    questionCounter.textContent = `Question ${currentQuestionIndex + 1}/${quizData.length}`;
+                } else {
+                    questionBox.textContent = "Quiz Completed!";
+                    answerBox.textContent = "Thank You!";
+                    nextBtn.textContent = "Restart";
+                    questionCounter.textContent = `Question ${quizData.length}/${quizData.length}`;
+                }
+            }
+            
+            function resetState() {
+                clearInterval(timerInterval);
+                answerBox.textContent = 'ଉତ୍ତର?';
+                answerBox.classList.remove('answer-revealed');
+                timerDisplay.textContent = '5';
+                videoOverlay.style.display = 'none';
+                funnyVideo.pause();
+                isTimerActive = false;
+                stopEventSounds();
+            }
+
+            function startTimer() {
+                if (isTimerActive || currentQuestionIndex >= quizData.length) return;
+                
+                stopEventSounds();
+                
+                isTimerActive = true;
+                countdown = 5;
+                timerDisplay.textContent = countdown;
+                playSound(timerSound);
+                timerInterval = setInterval(() => {
+                    countdown--;
+                    timerDisplay.textContent = countdown;
+                    if (countdown <= 0) {
+                        clearInterval(timerInterval);
+                        stopSound(timerSound);
+                        showAnswer();
+                    }
+                }, 1000);
+            }
+
+            function showAnswer() {
+                const currentAnswer = quizData[currentQuestionIndex].answer;
+                answerBox.textContent = currentAnswer;
+                answerBox.classList.add('answer-revealed');
+                playSound(answerSound);
+            }
+            
+            function playSound(sound) {
+                sound.load(); 
+                sound.play().catch(e => console.error("Audio play failed.", e));
+            }
+
+            function stopSound(sound) {
+                sound.pause();
+                sound.currentTime = 0;
+            }
+
+            function stopEventSounds() {
+                stopSound(timerSound);
+                stopSound(answerSound);
+                stopSound(nextQuestionSound);
+                stopSound(backgroundMusic);
+            }
+
+            timerCircle.addEventListener('click', startTimer);
+            
+            nextBtn.addEventListener('click', () => {
+                if (currentQuestionIndex >= quizData.length - 1) {
+                    currentQuestionIndex = 0;
+                    nextBtn.textContent = "ପରବର୍ତ୍ତୀ ପ୍ରଶ୍ନ";
+                    resetVideoList();
+                } else {
+                    currentQuestionIndex++;
+                }
+                
+                loadQuestion();
+                
+                playSound(nextQuestionSound);
+            });
+
+            funnyVideo.addEventListener('ended', () => {
+                videoOverlay.style.display = 'none';
+            });
+            
+            videoOverlay.addEventListener('click', () => {
+                 videoOverlay.style.display = 'none';
+                 funnyVideo.pause();
+            });
+
+            // --- START: MODIFIED KEYBOARD CONTROLS WITH ANIMATION ---
+            document.addEventListener('keydown', (event) => {
+                const key = event.key.toLowerCase(); 
+
+                // Shortcut 'T' to start the timer
+                if (key === 't') {
+                    event.preventDefault(); 
+                    timerCircle.classList.add('active-pulse');
+                    startTimer();
+                    setTimeout(() => {
+                        timerCircle.classList.remove('active-pulse');
+                    }, 300); // Animation lasts for 300ms
+                } 
+                // Shortcut 'N' for the Next button
+                else if (key === 'n') {
+                    event.preventDefault();
+                    nextBtn.classList.add('active-pulse');
+                    nextBtn.click(); 
+                    setTimeout(() => {
+                        nextBtn.classList.remove('active-pulse');
+                    }, 300); // Animation lasts for 300ms
+                }
+                // Existing shortcuts for video and funny sounds
+                else if (key === 'v' || key === 'f') {
+                    event.preventDefault(); 
+                    
+                    stopEventSounds();
+                    clearInterval(timerInterval);
+                    isTimerActive = false;
+                    videoOverlay.style.display = 'none';
+                    funnyVideo.pause();
+
+                    if (key === 'v') {
+                        if (availableVideos.length === 0) {
+                            resetVideoList();
+                        }
+                        const videoIndex = getRandomInt(availableVideos.length);
+                        const randomVideo = availableVideos.splice(videoIndex, 1)[0];
+                        
+                        funnyVideo.src = randomVideo;
+                        videoOverlay.style.display = 'flex';
+                        funnyVideo.play().catch(e => console.error("Video play failed:", e));
+                    } 
+                    else if (key === 'f') {
+                        const randomMusic = funnyMusicFiles[getRandomInt(funnyMusicFiles.length)];
+                        backgroundMusic.src = randomMusic;
+                        backgroundMusic.loop = false;
+                        playSound(backgroundMusic);
+                    }
+                }
+            });
+            // --- END: MODIFIED KEYBOARD CONTROLS ---
+
+            // ONE-TIME EVENT LISTENER TO START CONTINUOUS BACKGROUND MUSIC
+            window.addEventListener('click', () => {
+                continuousBgMusic.play().catch(e => console.log("User must interact with the document first."));
+            }, { once: true });
+
+            resetVideoList();
+            loadQuestion();
+        });
+    </script>
+</body>
+</html>
