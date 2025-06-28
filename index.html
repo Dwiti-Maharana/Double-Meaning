@@ -88,12 +88,9 @@
             transform: scale(1.1);
         }
         
-        /* --- START: NEW CSS CLASS FOR KEY PRESS ANIMATION --- */
         .timer-circle.active-pulse {
             transform: scale(1.1);
         }
-        /* --- END: NEW CSS CLASS --- */
-
 
         /* --- Next Question button styles with hover effect --- */
         #next-btn {
@@ -105,34 +102,30 @@
             font-size: 1rem;
             font-weight: 600;
             cursor: pointer;
-            transition: background-color 0.3s, box-shadow 0.3s, transform 0.2s; /* Added transform */
+            transition: background-color 0.3s, box-shadow 0.3s, transform 0.2s;
         }
 
         #next-btn:hover {
             background-color: #00e0e0;
             box-shadow: 0 0 15px var(--cyan-glow);
-            transform: scale(1.05); /* Added for extra effect */
+            transform: scale(1.05);
         }
         
-        /* --- START: NEW CSS CLASS FOR KEY PRESS ANIMATION --- */
         #next-btn.active-pulse {
             background-color: #00e0e0;
             box-shadow: 0 0 15px var(--cyan-glow);
             transform: scale(1.05);
         }
-        /* --- END: NEW CSS CLASS --- */
 
-
-        /* Question Box with red glowing border */
         .question-box {
             background-color: #0d0f1a;
             border-radius: 15px;
             padding: 40px 20px;
             margin-bottom: 30px;
             text-align: center;
-            font-size: 2.8rem;
+            font-size: 3.5rem;
             font-weight: 700;
-            min-height: 160px;
+            min-height: 180px;
             display: flex;
             justify-content: center;
             align-items: center;
@@ -197,6 +190,18 @@
             animation: glow-cyan 1.8s infinite alternate;
         }
 
+        .emoji-popup {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            font-size: 15rem;
+            z-index: 2000;
+            pointer-events: none;
+            animation: emoji-pop 1.5s ease-in-out forwards;
+            text-shadow: 0 0 20px rgba(255, 255, 0, 0.8);
+        }
+
         /* Keyframe animations */
         @keyframes glow-gold { from { box-shadow: 0 0 10px var(--gold-glow), 0 0 20px var(--gold-glow); } to { box-shadow: 0 0 20px var(--gold-glow), 0 0 30px var(--gold-glow); } }
         @keyframes glow-red { from { box-shadow: 0 0 10px var(--red-glow), 0 0 20px var(--red-glow); } to { box-shadow: 0 0 20px var(--red-glow), 0 0 30px var(--red-glow); } }
@@ -204,6 +209,24 @@
         @keyframes glow-green { from { box-shadow: 0 0 10px var(--green-glow), 0 0 20px var(--green-glow); } to { box-shadow: 0 0 20px var(--green-glow), 0 0 30px var(--green-glow); } }
         @keyframes glow-cyan { from { box-shadow: 0 0 20px var(--cyan-glow), 0 0 30px var(--cyan-glow); } to { box-shadow: 0 0 30px var(--cyan-glow), 0 0 45px var(--cyan-glow); } }
 
+        @keyframes emoji-pop {
+            0% {
+                transform: translate(-50%, -50%) scale(0);
+                opacity: 0;
+            }
+            30% {
+                transform: translate(-50%, -50%) scale(1.2) rotate(-15deg);
+                opacity: 1;
+            }
+            70% {
+                transform: translate(-50%, -50%) scale(1) rotate(0deg);
+                opacity: 1;
+            }
+            100% {
+                transform: translate(-50%, -50%) scale(0);
+                opacity: 0;
+            }
+        }
     </style>
 </head>
 <body>
@@ -247,27 +270,28 @@
         document.addEventListener('DOMContentLoaded', () => {
 
             const quizData = [
-              { question: "ଜଣେ ଲୋକ ଗାଧୋଇ ସାରିବା ପରେ କ'ଣ ହୋଇଯାଏ?", answer: "ସେ ଓଦା ହୋଇଯାଏ 😄" },
-              { question: "ଏମିତି କେଉଁ ଜାଗାକୁ ଲୋକେ ପ୍ରାୟତଃ ବିନା କପଡ଼ାରେ ଯାଆନ୍ତି?", answer: "ଗାଧୁଆ ଘର (ବାଥରୁମ୍) 🚿" },
-              { question: "କେଉଁ ଜିନିଷକୁ ଯେତେ ଟାଣିବ, ସେ ସେତେ ଲମ୍ବା ହେବ?", answer: "ରବର ବ୍ୟାଣ୍ଡ" },
-              { question: "ବାହାଘରର ପ୍ରଥମ ରାତିରେ ସ୍ତ୍ରୀ ତା' ସ୍ୱାମୀକୁ କ'ଣ ଦେଇଥାଏ?", answer: "ଏକ ଗ୍ଲାସ ଗରମ କ୍ଷୀର 🥛" },
-              { question: "ଏମିତି କ'ଣ ଜିନିଷ ଯାହାର କଣା ଅଛି, କିନ୍ତୁ ତାକୁ ଖୋଲିବାକୁ ହେଲେ ସେଥିରେ କିଛି ପୁରାଇବାକୁ ପଡ଼େ?", answer: "ତାଲା 🔑" },
-              { question: "ପୁରୁଷମାନଙ୍କର ଦୁଇ ଗୋଡ଼ ମଝିରେ କ'ଣ ଥାଏ ଯାହାକୁ ସେମାନେ ଚଲାନ୍ତି?", answer: "ବାଇକ୍ କିମ୍ବା ସାଇକେଲ୍ 🏍️" },
-              { question: "କେଉଁ ଜିନିଷ ପ୍ରଥମେ ଟାଣ ଥାଏ, କିନ୍ତୁ ଭିତରକୁ ଗଲା ପରେ ନରମ ହୋଇଯାଏ?", answer: "ଚା'ରେ ବୁଡ଼ା ଯାଇଥିବା ବିସ୍କୁଟ 🍪" },
-              { question: "ତାହା କ'ଣ ଯାହାକୁ ଲୋକମାନେ ରାତିରେ ଶୋଇବା ପୂର୍ବରୁ ବିଛଣାରେ କରିବାକୁ ଭଲ ପାଆନ୍ତି?", answer: "ବହି ପଢ଼ିବା କିମ୍ବା ମୋବାଇଲ୍ ଦେଖିବା 📖📱" },
-              { question: "ଶରୀରର କେଉଁ ଅଙ୍ଗ ଡରିଗଲେ ଠିଆ ହୋଇଯାଏ?", answer: "ଦେହର ଲୋମ 🥶" },
-              { question: "କେଉଁ ଜିନିଷ ଅନ୍ୟକୁ ଶୁଖାଇଲା ବେଳେ ନିଜେ ଓଦା ହୋଇଯାଏ?", answer: "ତଉଲିଆ (Towel) 🧖‍♀️" },
-              { question: "କାହାର ମୁଣ୍ଡ ଅଛି କିନ୍ତୁ ମଗଜ ନାହିଁ, ଆଉ ଘଷିଲେ ଜଳିଉଠେ?", answer: "ଦିଆସିଲି କାଠି 🔥" },
-              { question: "କେଉଁ ଜିନିଷର ଦେହ ସାରା କଣା, ତଥାପି ସେ ପାଣି ଧରି ରଖିପାରେ?", answer: "ସ୍ପଞ୍ଜ (Sponge) 🧽" },
-              { question: "ଝିଅମାନଙ୍କୁ କେଉଁ ଲମ୍ବା ଜିନିଷଟା ସବୁଠୁ ଅଧିକ ପସନ୍ଦ?", answer: "ଲମ୍ବା ବାଳ 💇‍♀️" },
-              { question: "ଦୁଇ ଜଣ ମିଶି କରନ୍ତି, କେବେ କେବେ ଚାରି ଜଣ ବି କରନ୍ତି, ଆଉ ବହୁତ ମଜା ଆସେ। ତାହା କ’ଣ?", answer: "ଲୁଡୁ ଖେଳ 🎲" },
-              { question: "ଝିଅମାନଙ୍କ ପାଖରେ ଏମିତି କ'ଣ ଅଛି ଯାହା ବାହାଘର ପରେ ବଡ଼ ହୋଇଯାଏ?", answer: "ସେମାନଙ୍କ ସାଙ୍ଗିଆ (Surname) 😉" },
-              { question: "ସ୍ୱାମୀ ନିଜ ସ୍ତ୍ରୀର କେଉଁ ଜିନିଷକୁ ଛୁଇଁପାରେ, କିନ୍ତୁ ଆଉ କେହି ଛୁଇଁ ପାରନ୍ତିନି?", answer: "ତାଙ୍କ ପାଦ 👣" },
-              { question: "ଏମିତି କିଏ ଯିଏ ରାତିରେ ବାହାରକୁ ଆସେ, କିନ୍ତୁ ଦିନ ହେଲେ ଲୁଚିଯାଏ?", answer: "ଆକାଶର ତାରା ✨" },
-              { question: "ପୁଅମାନଙ୍କ ପ୍ୟାଣ୍ଟ ଭିତରେ ଏମିତି କ’ଣ ଥାଏ ଯାହା ଝିଅମାନଙ୍କ ପାଖରେ ନଥାଏ?", answer: "ପକେଟ୍ (Pant Pocket) 😂" },
-              { question: "ଝିଅମାନେ କେଉଁ ଜିନିଷକୁ ପାଟିରେ ନେଇ ଖୋଲନ୍ତି?", answer: "କୋଲ୍ଡଡ୍ରିଙ୍କ୍ସ ବୋତଲ (ଦାନ୍ତରେ) 🥤" },
-              { question: "ଶରୀରର କେଉଁ ଅଙ୍ଗରେ ହାଡ଼ ନଥାଏ, କିନ୍ତୁ ତାହା ବହୁତ କାମ କରେ?", answer: "ଜିଭ 😋" }
-            ];            
+                { question: "ଗଛ ନୁହେଁ କିନ୍ତୁ ପତ୍ର ଅଛି, ମଣିଷ ନୁହେଁ କିନ୍ତୁ କଥା କହେ। ସେ କିଏ?", answer: "ବହି (Book)", emoji: "📖" },
+                { question: "ଲାଲ୍ ଗୁମ୍ଫା ଭିତରେ ବତିଶଟି ଧଳା ସିପାହୀ। ସେମାନେ କିଏ?", answer: "ଦାନ୍ତ (Teeth)", emoji: "🦷" },
+                { question: "ତାକୁ ଲଙ୍ଗଳା କଲେ ସିଏ କନ୍ଦାଏ। ସେ କିଏ?", answer: "ପିଆଜ (Onion)", emoji: "🧅" },
+                { question: "ତିନିଟା ଆଖି ଅଛି ହେଲେ ଦେଖିପାରେନି। ସେ କିଏ?", answer: "ନଡ଼ିଆ (Coconut)", emoji: "🥥" },
+                { question: "ଆଗେ ଆଗେ ଯାଏ ସାନ ଭାଇ, ପଛରେ ଗୋଡ଼ାଏ ଲାଞ୍ଜ ଧରି ବଡ଼ ଭାଇ। ସେମାନେ କିଏ?", answer: "ଛୁଞ୍ଚି ଓ ସୂତା (Needle and Thread)", emoji: "🪡" },
+                { question: "କାଠ ଖାଇ ବଞ୍ଚେ, ପାଣି ପିଇ ମରେ। ସେ କିଏ?", answer: "ନିଆଁ (Fire)", emoji: "🔥" },
+                { question: "ଗୋଟିଏ ଗୋଡ଼ରେ ଠିଆ ହୁଏ, ବର୍ଷା ହେଲେ ମୁଣ୍ଡ ଟେକେ। ସେ କିଏ?", answer: "ଛତା (Umbrella)", emoji: "☂️" },
+                { question: "ମାଆ ଶୋଇଥାଏ ତଳେ, ପୁଅ ଖେଳେ ତା' ଛାତି ଉପରେ। ସେମାନେ କିଏ?", answer: "ଶିଳ ଓ ପୁଆ (Grinding Stone)", emoji: "🪨" }, // Note: No standard emoji, using a relevant character
+                { question: "ଗୋଡ଼ ନାହିଁ କିନ୍ତୁ ସବୁବେଳେ ଚାଲେ, ଶେଯ ଅଛି କିନ୍ତୁ କେବେ ଶୁଏ ନାହିଁ। ସେ କିଏ?", answer: "ନଈ / ନଦୀ (River)", emoji: "🏞️" },
+                { question: "ମୁଣ୍ଡରେ ତା'ର ସବୁଜ ଟୋପି, ଦେହ ସାରା ବାଇଗଣୀ। ସେ କିଏ?", answer: "ବାଇଗଣ (Brinjal)", emoji: "🍆" },
+                { question: "କିଏ ସେ ଯିଏ ନିଜ ଘରକୁ ପିଠିରେ ବୋହି ଚାଲେ?", answer: "ଗେଣ୍ଡା (Snail)", emoji: "🐌" },
+                { question: "ଛୋଟ ପିଲାଟେ, ତା ଦେହରେ ଭାରି ରାଗ। ସେ କିଏ?", answer: "ଲଙ୍କା (Chilli)", emoji: "🌶️" },
+                { question: "ପେଟରେ ପଶି ମୋଡ଼ି ହେଲେ, ପାଟି ତା'ର ଖୋଲେ। ସେ କିଏ?", answer: "ତାଲା (Lock)", emoji: "🔒" },
+                { question: "ଆଲୁଅରେ ଜନ୍ମ ତା'ର, ଅନ୍ଧାରରେ ମରେ। ତାକୁ ଧରିବାକୁ ଗଲେ ସେ ପଳାଏ ଡରେ। ସେ କିଏ?", answer: "ଛାଇ (Shadow)", emoji: "👤" },
+                { question: "ମୁଣ୍ଡ ଅଛି ମଗଜ ନାହିଁ, ଟିକେ ଘଷିଦେଲେ ନିଜ ମୁଣ୍ଡ ଖାଇଯାଏ। ସେ କିଏ?", answer: "ଦିଆସିଲି କାଠି (Matchstick)", emoji: "🔥" },
+                { question: "ଗୋଟିଏ ମାଆର ଶହେ ପିଲା, ସମସ୍ତେ ବଙ୍କା। ସେମାନେ କିଏ?", answer: "କଦଳୀ କାନ୍ଦି (A bunch of bananas)", emoji: "🍌" },
+                { question: "କାନ ମୋଡ଼ିଦେଲେ ପୁଅ ଧାଇଁ ପଳାଏ। ସେମାନେ କିଏ?", answer: "ଧନୁ ଓ ତୀର (Bow and Arrow)", emoji: "🏹" },
+                { question: "ଦାନ୍ତ ଅଛି ତା'ର ଶହେ, କିନ୍ତୁ କିଛି ଚୋବାଇ ପାରେନାହିଁ। ସେ କିଏ?", answer: "କରତ (Saw)", emoji: "🪚" },
+                { question: "ଜନମ ବେଳେ ସବୁଜ, ମରଣ ବେଳେ ତା ମୁହଁ ଲାଲ୍। କୁହ ସେ କିଏ?", answer: "ପାନ (Betel Leaf)", emoji: "🍃" },
+                { question: "ଗୋଟିଏ ପତଳା ଲୋକ, ସାରା ଘରକୁ କରେ ସଫା। ସେ କିଏ?", answer: "ଝାଡୁ (Broom)", emoji: "🧹" }
+            ];
+
             const funnyVideoFiles = [];
             for (let i = 1; i <= 15; i++) {
                 funnyVideoFiles.push(`video${i}.mp4`);
@@ -400,29 +424,51 @@
                  funnyVideo.pause();
             });
 
-            // --- START: MODIFIED KEYBOARD CONTROLS WITH ANIMATION ---
             document.addEventListener('keydown', (event) => {
                 const key = event.key.toLowerCase(); 
 
-                // Shortcut 'T' to start the timer
                 if (key === 't') {
                     event.preventDefault(); 
                     timerCircle.classList.add('active-pulse');
                     startTimer();
                     setTimeout(() => {
                         timerCircle.classList.remove('active-pulse');
-                    }, 300); // Animation lasts for 300ms
+                    }, 300);
                 } 
-                // Shortcut 'N' for the Next button
                 else if (key === 'n') {
                     event.preventDefault();
                     nextBtn.classList.add('active-pulse');
                     nextBtn.click(); 
                     setTimeout(() => {
                         nextBtn.classList.remove('active-pulse');
-                    }, 300); // Animation lasts for 300ms
+                    }, 300);
                 }
-                // Existing shortcuts for video and funny sounds
+                // --- START: MODIFIED 'U' KEY HANDLER ---
+                else if (key === 'u') {
+                    event.preventDefault();
+                    
+                    // Play the sound effect
+                    playSound(nextQuestionSound);
+
+                    const currentEmoji = quizData[currentQuestionIndex].emoji;
+                    if (!currentEmoji) return; 
+
+                    const existingPopup = document.querySelector('.emoji-popup');
+                    if (existingPopup) {
+                        existingPopup.remove();
+                    }
+
+                    const emojiPopup = document.createElement('div');
+                    emojiPopup.classList.add('emoji-popup');
+                    emojiPopup.innerHTML = currentEmoji;
+
+                    document.body.appendChild(emojiPopup);
+
+                    setTimeout(() => {
+                        emojiPopup.remove();
+                    }, 1500); 
+                }
+                // --- END: MODIFIED 'U' KEY HANDLER ---
                 else if (key === 'v' || key === 'f') {
                     event.preventDefault(); 
                     
@@ -451,9 +497,7 @@
                     }
                 }
             });
-            // --- END: MODIFIED KEYBOARD CONTROLS ---
 
-            // ONE-TIME EVENT LISTENER TO START CONTINUOUS BACKGROUND MUSIC
             window.addEventListener('click', () => {
                 continuousBgMusic.play().catch(e => console.log("User must interact with the document first."));
             }, { once: true });
