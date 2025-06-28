@@ -68,7 +68,6 @@
             gap: 15px;
         }
 
-        /* --- Timer circle styles with hover effect --- */
         .timer-circle {
             width: 60px;
             height: 60px;
@@ -84,15 +83,9 @@
             transition: transform 0.2s;
         }
 
-        .timer-circle:hover {
-            transform: scale(1.1);
-        }
-        
-        .timer-circle.active-pulse {
-            transform: scale(1.1);
-        }
+        .timer-circle:hover { transform: scale(1.1); }
+        .timer-circle.active-pulse { transform: scale(1.1); }
 
-        /* --- Next Question button styles with hover effect --- */
         #next-btn {
             background-color: var(--cyan-glow);
             color: #10141f;
@@ -134,7 +127,6 @@
             animation: glow-red 2.5s infinite alternate;
         }
 
-        /* Answer Area */
         .answer-area {
             position: relative;
             display: flex;
@@ -143,7 +135,6 @@
             margin-bottom: 10px;
         }
 
-        /* Answer Box base style */
         .answer-box {
             background-color: #0d0f1a;
             border-radius: 15px;
@@ -202,6 +193,33 @@
             text-shadow: 0 0 20px rgba(255, 255, 0, 0.8);
         }
 
+        /* --- START: MOBILE CONTROLS STYLING --- */
+        .mobile-controls-panel {
+            display: none; /* Hidden by default on desktop */
+            width: 100%;
+            margin-top: 25px;
+            gap: 10px;
+        }
+
+        .mobile-controls-panel button {
+            flex: 1; /* Make all buttons take equal space */
+            padding: 12px 5px;
+            font-size: 1rem;
+            font-weight: 600;
+            color: var(--primary-text);
+            background-color: #2c3359;
+            border: 2px solid var(--cyan-glow);
+            border-radius: 10px;
+            cursor: pointer;
+            transition: background-color 0.3s, box-shadow 0.3s;
+        }
+
+        .mobile-controls-panel button:active { /* Style for when a button is tapped */
+            background-color: #3d467a;
+            box-shadow: 0 0 10px var(--cyan-glow);
+        }
+        /* --- END: MOBILE CONTROLS STYLING --- */
+
         /* Keyframe animations */
         @keyframes glow-gold { from { box-shadow: 0 0 10px var(--gold-glow), 0 0 20px var(--gold-glow); } to { box-shadow: 0 0 20px var(--gold-glow), 0 0 30px var(--gold-glow); } }
         @keyframes glow-red { from { box-shadow: 0 0 10px var(--red-glow), 0 0 20px var(--red-glow); } to { box-shadow: 0 0 20px var(--red-glow), 0 0 30px var(--red-glow); } }
@@ -210,23 +228,42 @@
         @keyframes glow-cyan { from { box-shadow: 0 0 20px var(--cyan-glow), 0 0 30px var(--cyan-glow); } to { box-shadow: 0 0 30px var(--cyan-glow), 0 0 45px var(--cyan-glow); } }
 
         @keyframes emoji-pop {
-            0% {
-                transform: translate(-50%, -50%) scale(0);
-                opacity: 0;
+            0% { transform: translate(-50%, -50%) scale(0); opacity: 0; }
+            30% { transform: translate(-50%, -50%) scale(1.2) rotate(-15deg); opacity: 1; }
+            70% { transform: translate(-50%, -50%) scale(1) rotate(0deg); opacity: 1; }
+            100% { transform: translate(-50%, -50%) scale(0); opacity: 0; }
+        }
+
+        /* --- START: MEDIA QUERY FOR MOBILE DEVICES --- */
+        @media (max-width: 768px) {
+            .quiz-container {
+                padding: 20px 15px;
             }
-            30% {
-                transform: translate(-50%, -50%) scale(1.2) rotate(-15deg);
-                opacity: 1;
+
+            .question-box {
+                font-size: 2.2rem; /* Reduce font size on smaller screens */
+                min-height: 150px;
             }
-            70% {
-                transform: translate(-50%, -50%) scale(1) rotate(0deg);
-                opacity: 1;
+
+            .answer-box {
+                font-size: 1.8rem; /* Reduce font size on smaller screens */
+                width: 70%;
             }
-            100% {
-                transform: translate(-50%, -50%) scale(0);
-                opacity: 0;
+
+            .header {
+                font-size: 0.9rem;
+            }
+
+            #next-btn {
+                padding: 8px 15px;
+            }
+
+            .mobile-controls-panel {
+                display: flex; /* Show the controls on mobile */
             }
         }
+        /* --- END: MEDIA QUERY --- */
+
     </style>
 </head>
 <body>
@@ -252,6 +289,16 @@
                 ଉତ୍ତର?
             </div>
         </div>
+
+        <!-- START: NEW MOBILE CONTROLS HTML -->
+        <div class="mobile-controls-panel">
+            <button id="mobile-timer-btn">⏱️ Timer</button>
+            <button id="mobile-emoji-btn">💡 Emoji</button>
+            <button id="mobile-video-btn">🎬 Video</button>
+            <button id="mobile-sound-btn">😂 Sound</button>
+            <button id="mobile-next-btn">Next ➡️</button>
+        </div>
+        <!-- END: NEW MOBILE CONTROLS HTML -->
     </div>
 
     <div id="video-overlay" class="video-overlay">
@@ -277,7 +324,7 @@
                 { question: "ଆଗେ ଆଗେ ଯାଏ ସାନ ଭାଇ, ପଛରେ ଗୋଡ଼ାଏ ଲାଞ୍ଜ ଧରି ବଡ଼ ଭାଇ। ସେମାନେ କିଏ?", answer: "ଛୁଞ୍ଚି ଓ ସୂତା (Needle and Thread)", emoji: "🪡" },
                 { question: "କାଠ ଖାଇ ବଞ୍ଚେ, ପାଣି ପିଇ ମରେ। ସେ କିଏ?", answer: "ନିଆଁ (Fire)", emoji: "🔥" },
                 { question: "ଗୋଟିଏ ଗୋଡ଼ରେ ଠିଆ ହୁଏ, ବର୍ଷା ହେଲେ ମୁଣ୍ଡ ଟେକେ। ସେ କିଏ?", answer: "ଛତା (Umbrella)", emoji: "☂️" },
-                { question: "ମାଆ ଶୋଇଥାଏ ତଳେ, ପୁଅ ଖେଳେ ତା' ଛାତି ଉପରେ। ସେମାନେ କିଏ?", answer: "ଶିଳ ଓ ପୁଆ (Grinding Stone)", emoji: "🪨" }, // Note: No standard emoji, using a relevant character
+                { question: "ମାଆ ଶୋଇଥାଏ ତଳେ, ପୁଅ ଖେଳେ ତା' ଛାତି ଉପରେ। ସେମାନେ କିଏ?", answer: "ଶିଳ ଓ ପୁଆ (Grinding Stone)", emoji: "맷" }, // Note: No standard emoji, using a relevant character
                 { question: "ଗୋଡ଼ ନାହିଁ କିନ୍ତୁ ସବୁବେଳେ ଚାଲେ, ଶେଯ ଅଛି କିନ୍ତୁ କେବେ ଶୁଏ ନାହିଁ। ସେ କିଏ?", answer: "ନଈ / ନଦୀ (River)", emoji: "🏞️" },
                 { question: "ମୁଣ୍ଡରେ ତା'ର ସବୁଜ ଟୋପି, ଦେହ ସାରା ବାଇଗଣୀ। ସେ କିଏ?", answer: "ବାଇଗଣ (Brinjal)", emoji: "🍆" },
                 { question: "କିଏ ସେ ଯିଏ ନିଜ ଘରକୁ ପିଠିରେ ବୋହି ଚାଲେ?", answer: "ଗେଣ୍ଡା (Snail)", emoji: "🐌" },
@@ -301,6 +348,7 @@
                 funnyMusicFiles.push(`funny${i}.mp3`);
             }
 
+            // Standard elements
             const questionBox = document.getElementById('question-box');
             const answerBox = document.getElementById('answer-box');
             const questionCounter = document.getElementById('question-counter');
@@ -310,6 +358,15 @@
             const videoOverlay = document.getElementById('video-overlay');
             const funnyVideo = document.getElementById('funny-video');
 
+            // --- START: MOBILE BUTTON ELEMENTS ---
+            const mobileTimerBtn = document.getElementById('mobile-timer-btn');
+            const mobileEmojiBtn = document.getElementById('mobile-emoji-btn');
+            const mobileVideoBtn = document.getElementById('mobile-video-btn');
+            const mobileSoundBtn = document.getElementById('mobile-sound-btn');
+            const mobileNextBtn = document.getElementById('mobile-next-btn');
+            // --- END: MOBILE BUTTON ELEMENTS ---
+
+            // Audio elements
             const timerSound = document.getElementById('timer-sound');
             const answerSound = document.getElementById('answer-sound');
             const nextQuestionSound = document.getElementById('next-question-sound');
@@ -399,6 +456,63 @@
                 stopSound(backgroundMusic);
             }
 
+            // --- START: REUSABLE ACTION FUNCTIONS ---
+            function triggerEmojiPopup() {
+                playSound(nextQuestionSound);
+
+                const currentEmoji = quizData[currentQuestionIndex].emoji;
+                if (!currentEmoji) return; 
+
+                const existingPopup = document.querySelector('.emoji-popup');
+                if (existingPopup) {
+                    existingPopup.remove();
+                }
+
+                const emojiPopup = document.createElement('div');
+                emojiPopup.classList.add('emoji-popup');
+                emojiPopup.innerHTML = currentEmoji;
+
+                document.body.appendChild(emojiPopup);
+
+                setTimeout(() => {
+                    emojiPopup.remove();
+                }, 1500); 
+            }
+
+            function triggerVideo() {
+                stopEventSounds();
+                clearInterval(timerInterval);
+                isTimerActive = false;
+                videoOverlay.style.display = 'none';
+                funnyVideo.pause();
+
+                if (availableVideos.length === 0) {
+                    resetVideoList();
+                }
+                const videoIndex = getRandomInt(availableVideos.length);
+                const randomVideo = availableVideos.splice(videoIndex, 1)[0];
+                
+                funnyVideo.src = randomVideo;
+                videoOverlay.style.display = 'flex';
+                funnyVideo.play().catch(e => console.error("Video play failed:", e));
+            }
+
+            function triggerFunnySound() {
+                stopEventSounds();
+                clearInterval(timerInterval);
+                isTimerActive = false;
+                videoOverlay.style.display = 'none';
+                funnyVideo.pause();
+
+                const randomMusic = funnyMusicFiles[getRandomInt(funnyMusicFiles.length)];
+                backgroundMusic.src = randomMusic;
+                backgroundMusic.loop = false;
+                playSound(backgroundMusic);
+            }
+            // --- END: REUSABLE ACTION FUNCTIONS ---
+
+
+            // --- STANDARD EVENT LISTENERS ---
             timerCircle.addEventListener('click', startTimer);
             
             nextBtn.addEventListener('click', () => {
@@ -409,21 +523,17 @@
                 } else {
                     currentQuestionIndex++;
                 }
-                
                 loadQuestion();
-                
                 playSound(nextQuestionSound);
             });
 
-            funnyVideo.addEventListener('ended', () => {
-                videoOverlay.style.display = 'none';
-            });
-            
+            funnyVideo.addEventListener('ended', () => { videoOverlay.style.display = 'none'; });
             videoOverlay.addEventListener('click', () => {
                  videoOverlay.style.display = 'none';
                  funnyVideo.pause();
             });
 
+            // --- KEYBOARD CONTROLS ---
             document.addEventListener('keydown', (event) => {
                 const key = event.key.toLowerCase(); 
 
@@ -431,73 +541,38 @@
                     event.preventDefault(); 
                     timerCircle.classList.add('active-pulse');
                     startTimer();
-                    setTimeout(() => {
-                        timerCircle.classList.remove('active-pulse');
-                    }, 300);
+                    setTimeout(() => { timerCircle.classList.remove('active-pulse'); }, 300);
                 } 
                 else if (key === 'n') {
                     event.preventDefault();
                     nextBtn.classList.add('active-pulse');
                     nextBtn.click(); 
-                    setTimeout(() => {
-                        nextBtn.classList.remove('active-pulse');
-                    }, 300);
+                    setTimeout(() => { nextBtn.classList.remove('active-pulse'); }, 300);
                 }
-                // --- START: MODIFIED 'U' KEY HANDLER ---
                 else if (key === 'u') {
                     event.preventDefault();
-                    
-                    // Play the sound effect
-                    playSound(nextQuestionSound);
-
-                    const currentEmoji = quizData[currentQuestionIndex].emoji;
-                    if (!currentEmoji) return; 
-
-                    const existingPopup = document.querySelector('.emoji-popup');
-                    if (existingPopup) {
-                        existingPopup.remove();
-                    }
-
-                    const emojiPopup = document.createElement('div');
-                    emojiPopup.classList.add('emoji-popup');
-                    emojiPopup.innerHTML = currentEmoji;
-
-                    document.body.appendChild(emojiPopup);
-
-                    setTimeout(() => {
-                        emojiPopup.remove();
-                    }, 1500); 
+                    triggerEmojiPopup();
                 }
-                // --- END: MODIFIED 'U' KEY HANDLER ---
-                else if (key === 'v' || key === 'f') {
-                    event.preventDefault(); 
-                    
-                    stopEventSounds();
-                    clearInterval(timerInterval);
-                    isTimerActive = false;
-                    videoOverlay.style.display = 'none';
-                    funnyVideo.pause();
-
-                    if (key === 'v') {
-                        if (availableVideos.length === 0) {
-                            resetVideoList();
-                        }
-                        const videoIndex = getRandomInt(availableVideos.length);
-                        const randomVideo = availableVideos.splice(videoIndex, 1)[0];
-                        
-                        funnyVideo.src = randomVideo;
-                        videoOverlay.style.display = 'flex';
-                        funnyVideo.play().catch(e => console.error("Video play failed:", e));
-                    } 
-                    else if (key === 'f') {
-                        const randomMusic = funnyMusicFiles[getRandomInt(funnyMusicFiles.length)];
-                        backgroundMusic.src = randomMusic;
-                        backgroundMusic.loop = false;
-                        playSound(backgroundMusic);
-                    }
+                else if (key === 'v') {
+                    event.preventDefault();
+                    triggerVideo();
+                }
+                else if (key === 'f') {
+                    event.preventDefault();
+                    triggerFunnySound();
                 }
             });
 
+            // --- START: MOBILE BUTTON EVENT LISTENERS ---
+            mobileTimerBtn.addEventListener('click', startTimer);
+            mobileNextBtn.addEventListener('click', () => nextBtn.click());
+            mobileEmojiBtn.addEventListener('click', triggerEmojiPopup);
+            mobileVideoBtn.addEventListener('click', triggerVideo);
+            mobileSoundBtn.addEventListener('click', triggerFunnySound);
+            // --- END: MOBILE BUTTON EVENT LISTENERS ---
+
+
+            // ONE-TIME EVENT LISTENER TO START CONTINUOUS BACKGROUND MUSIC
             window.addEventListener('click', () => {
                 continuousBgMusic.play().catch(e => console.log("User must interact with the document first."));
             }, { once: true });
