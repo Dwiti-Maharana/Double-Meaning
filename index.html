@@ -193,32 +193,40 @@
             text-shadow: 0 0 20px rgba(255, 255, 0, 0.8);
         }
 
-        /* --- START: MOBILE CONTROLS STYLING --- */
+        /* --- START: UPDATED MOBILE CONTROLS STYLING --- */
         .mobile-controls-panel {
-            display: none; /* Hidden by default on desktop */
+            display: none; /* Hidden on desktop */
+            position: fixed; /* Fixed to the bottom of the screen */
+            bottom: 0;
+            left: 0;
             width: 100%;
-            margin-top: 25px;
+            padding: 15px 10px;
+            background-color: rgba(26, 31, 54, 0.6); /* Semi-transparent glass effect */
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            z-index: 500; /* Sit on top of the background */
             gap: 10px;
+            border-top: 1px solid rgba(0, 255, 255, 0.2); /* Subtle top border */
         }
 
         .mobile-controls-panel button {
-            flex: 1; /* Make all buttons take equal space */
+            flex: 1;
             padding: 12px 5px;
             font-size: 1rem;
             font-weight: 600;
             color: var(--primary-text);
-            background-color: #2c3359;
+            background-color: rgba(44, 51, 89, 0.7);
             border: 2px solid var(--cyan-glow);
             border-radius: 10px;
             cursor: pointer;
             transition: background-color 0.3s, box-shadow 0.3s;
         }
 
-        .mobile-controls-panel button:active { /* Style for when a button is tapped */
+        .mobile-controls-panel button:active {
             background-color: #3d467a;
             box-shadow: 0 0 10px var(--cyan-glow);
         }
-        /* --- END: MOBILE CONTROLS STYLING --- */
+        /* --- END: UPDATED MOBILE CONTROLS STYLING --- */
 
         /* Keyframe animations */
         @keyframes glow-gold { from { box-shadow: 0 0 10px var(--gold-glow), 0 0 20px var(--gold-glow); } to { box-shadow: 0 0 20px var(--gold-glow), 0 0 30px var(--gold-glow); } }
@@ -234,36 +242,30 @@
             100% { transform: translate(-50%, -50%) scale(0); opacity: 0; }
         }
 
-        /* --- START: MEDIA QUERY FOR MOBILE DEVICES --- */
+        /* --- MEDIA QUERY FOR MOBILE DEVICES --- */
         @media (max-width: 768px) {
             .quiz-container {
                 padding: 20px 15px;
+                margin-bottom: 100px; /* Add margin to prevent overlap with fixed controls */
             }
 
             .question-box {
-                font-size: 2.2rem; /* Reduce font size on smaller screens */
+                font-size: 2.2rem;
                 min-height: 150px;
             }
 
             .answer-box {
-                font-size: 1.8rem; /* Reduce font size on smaller screens */
+                font-size: 1.8rem;
                 width: 70%;
             }
 
-            .header {
-                font-size: 0.9rem;
-            }
-
-            #next-btn {
-                padding: 8px 15px;
-            }
+            .header { font-size: 0.9rem; }
+            #next-btn { padding: 8px 15px; }
 
             .mobile-controls-panel {
                 display: flex; /* Show the controls on mobile */
             }
         }
-        /* --- END: MEDIA QUERY --- */
-
     </style>
 </head>
 <body>
@@ -289,21 +291,21 @@
                 ଉତ୍ତର?
             </div>
         </div>
-
-        <!-- START: NEW MOBILE CONTROLS HTML -->
-        <div class="mobile-controls-panel">
-            <button id="mobile-timer-btn">⏱️ Timer</button>
-            <button id="mobile-emoji-btn">💡 Emoji</button>
-            <button id="mobile-video-btn">🎬 Video</button>
-            <button id="mobile-sound-btn">😂 Sound</button>
-            <button id="mobile-next-btn">Next ➡️</button>
-        </div>
-        <!-- END: NEW MOBILE CONTROLS HTML -->
     </div>
 
     <div id="video-overlay" class="video-overlay">
         <video id="funny-video"></video>
     </div>
+    
+    <!-- START: MOBILE CONTROLS PANEL (MOVED OUTSIDE) -->
+    <div class="mobile-controls-panel">
+        <button id="mobile-timer-btn">⏱️ Timer</button>
+        <button id="mobile-emoji-btn">💡 Emoji</button>
+        <button id="mobile-video-btn">🎬 Video</button>
+        <button id="mobile-sound-btn">😂 Sound</button>
+        <button id="mobile-next-btn">Next ➡️</button>
+    </div>
+    <!-- END: MOBILE CONTROLS PANEL -->
 
     <!-- Audio Files -->
     <audio id="timer-sound" src="timer.mp3" preload="auto"></audio>
@@ -348,7 +350,6 @@
                 funnyMusicFiles.push(`funny${i}.mp3`);
             }
 
-            // Standard elements
             const questionBox = document.getElementById('question-box');
             const answerBox = document.getElementById('answer-box');
             const questionCounter = document.getElementById('question-counter');
@@ -358,15 +359,12 @@
             const videoOverlay = document.getElementById('video-overlay');
             const funnyVideo = document.getElementById('funny-video');
 
-            // --- START: MOBILE BUTTON ELEMENTS ---
             const mobileTimerBtn = document.getElementById('mobile-timer-btn');
             const mobileEmojiBtn = document.getElementById('mobile-emoji-btn');
             const mobileVideoBtn = document.getElementById('mobile-video-btn');
             const mobileSoundBtn = document.getElementById('mobile-sound-btn');
             const mobileNextBtn = document.getElementById('mobile-next-btn');
-            // --- END: MOBILE BUTTON ELEMENTS ---
 
-            // Audio elements
             const timerSound = document.getElementById('timer-sound');
             const answerSound = document.getElementById('answer-sound');
             const nextQuestionSound = document.getElementById('next-question-sound');
@@ -456,27 +454,17 @@
                 stopSound(backgroundMusic);
             }
 
-            // --- START: REUSABLE ACTION FUNCTIONS ---
             function triggerEmojiPopup() {
                 playSound(nextQuestionSound);
-
                 const currentEmoji = quizData[currentQuestionIndex].emoji;
                 if (!currentEmoji) return; 
-
                 const existingPopup = document.querySelector('.emoji-popup');
-                if (existingPopup) {
-                    existingPopup.remove();
-                }
-
+                if (existingPopup) { existingPopup.remove(); }
                 const emojiPopup = document.createElement('div');
                 emojiPopup.classList.add('emoji-popup');
                 emojiPopup.innerHTML = currentEmoji;
-
                 document.body.appendChild(emojiPopup);
-
-                setTimeout(() => {
-                    emojiPopup.remove();
-                }, 1500); 
+                setTimeout(() => { emojiPopup.remove(); }, 1500); 
             }
 
             function triggerVideo() {
@@ -485,13 +473,9 @@
                 isTimerActive = false;
                 videoOverlay.style.display = 'none';
                 funnyVideo.pause();
-
-                if (availableVideos.length === 0) {
-                    resetVideoList();
-                }
+                if (availableVideos.length === 0) { resetVideoList(); }
                 const videoIndex = getRandomInt(availableVideos.length);
                 const randomVideo = availableVideos.splice(videoIndex, 1)[0];
-                
                 funnyVideo.src = randomVideo;
                 videoOverlay.style.display = 'flex';
                 funnyVideo.play().catch(e => console.error("Video play failed:", e));
@@ -503,16 +487,12 @@
                 isTimerActive = false;
                 videoOverlay.style.display = 'none';
                 funnyVideo.pause();
-
                 const randomMusic = funnyMusicFiles[getRandomInt(funnyMusicFiles.length)];
                 backgroundMusic.src = randomMusic;
                 backgroundMusic.loop = false;
                 playSound(backgroundMusic);
             }
-            // --- END: REUSABLE ACTION FUNCTIONS ---
 
-
-            // --- STANDARD EVENT LISTENERS ---
             timerCircle.addEventListener('click', startTimer);
             
             nextBtn.addEventListener('click', () => {
@@ -533,10 +513,8 @@
                  funnyVideo.pause();
             });
 
-            // --- KEYBOARD CONTROLS ---
             document.addEventListener('keydown', (event) => {
                 const key = event.key.toLowerCase(); 
-
                 if (key === 't') {
                     event.preventDefault(); 
                     timerCircle.classList.add('active-pulse');
@@ -549,30 +527,17 @@
                     nextBtn.click(); 
                     setTimeout(() => { nextBtn.classList.remove('active-pulse'); }, 300);
                 }
-                else if (key === 'u') {
-                    event.preventDefault();
-                    triggerEmojiPopup();
-                }
-                else if (key === 'v') {
-                    event.preventDefault();
-                    triggerVideo();
-                }
-                else if (key === 'f') {
-                    event.preventDefault();
-                    triggerFunnySound();
-                }
+                else if (key === 'u') { event.preventDefault(); triggerEmojiPopup(); }
+                else if (key === 'v') { event.preventDefault(); triggerVideo(); }
+                else if (key === 'f') { event.preventDefault(); triggerFunnySound(); }
             });
 
-            // --- START: MOBILE BUTTON EVENT LISTENERS ---
             mobileTimerBtn.addEventListener('click', startTimer);
             mobileNextBtn.addEventListener('click', () => nextBtn.click());
             mobileEmojiBtn.addEventListener('click', triggerEmojiPopup);
             mobileVideoBtn.addEventListener('click', triggerVideo);
             mobileSoundBtn.addEventListener('click', triggerFunnySound);
-            // --- END: MOBILE BUTTON EVENT LISTENERS ---
 
-
-            // ONE-TIME EVENT LISTENER TO START CONTINUOUS BACKGROUND MUSIC
             window.addEventListener('click', () => {
                 continuousBgMusic.play().catch(e => console.log("User must interact with the document first."));
             }, { once: true });
