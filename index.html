@@ -193,20 +193,19 @@
             text-shadow: 0 0 20px rgba(255, 255, 0, 0.8);
         }
 
-        /* --- START: UPDATED MOBILE CONTROLS STYLING --- */
         .mobile-controls-panel {
-            display: none; /* Hidden on desktop */
-            position: fixed; /* Fixed to the bottom of the screen */
+            display: none;
+            position: fixed;
             bottom: 0;
             left: 0;
             width: 100%;
             padding: 15px 10px;
-            background-color: rgba(26, 31, 54, 0.6); /* Semi-transparent glass effect */
+            background-color: rgba(26, 31, 54, 0.6);
             backdrop-filter: blur(10px);
             -webkit-backdrop-filter: blur(10px);
-            z-index: 500; /* Sit on top of the background */
+            z-index: 500;
             gap: 10px;
-            border-top: 1px solid rgba(0, 255, 255, 0.2); /* Subtle top border */
+            border-top: 1px solid rgba(0, 255, 255, 0.2);
         }
 
         .mobile-controls-panel button {
@@ -226,7 +225,6 @@
             background-color: #3d467a;
             box-shadow: 0 0 10px var(--cyan-glow);
         }
-        /* --- END: UPDATED MOBILE CONTROLS STYLING --- */
 
         /* Keyframe animations */
         @keyframes glow-gold { from { box-shadow: 0 0 10px var(--gold-glow), 0 0 20px var(--gold-glow); } to { box-shadow: 0 0 20px var(--gold-glow), 0 0 30px var(--gold-glow); } }
@@ -242,11 +240,11 @@
             100% { transform: translate(-50%, -50%) scale(0); opacity: 0; }
         }
 
-        /* --- MEDIA QUERY FOR MOBILE DEVICES --- */
+        /* MEDIA QUERY FOR MOBILE DEVICES */
         @media (max-width: 768px) {
             .quiz-container {
                 padding: 20px 15px;
-                margin-bottom: 100px; /* Add margin to prevent overlap with fixed controls */
+                margin-bottom: 100px;
             }
 
             .question-box {
@@ -260,10 +258,15 @@
             }
 
             .header { font-size: 0.9rem; }
-            #next-btn { padding: 8px 15px; }
+            
+            /* --- START: HIDE ORIGINAL NEXT BUTTON ON MOBILE --- */
+            #next-btn {
+                display: none;
+            }
+            /* --- END: HIDE ORIGINAL NEXT BUTTON ON MOBILE --- */
 
             .mobile-controls-panel {
-                display: flex; /* Show the controls on mobile */
+                display: flex;
             }
         }
     </style>
@@ -297,7 +300,6 @@
         <video id="funny-video"></video>
     </div>
     
-    <!-- START: MOBILE CONTROLS PANEL (MOVED OUTSIDE) -->
     <div class="mobile-controls-panel">
         <button id="mobile-timer-btn">⏱️ Timer</button>
         <button id="mobile-emoji-btn">💡 Emoji</button>
@@ -305,7 +307,6 @@
         <button id="mobile-sound-btn">😂 Sound</button>
         <button id="mobile-next-btn">Next ➡️</button>
     </div>
-    <!-- END: MOBILE CONTROLS PANEL -->
 
     <!-- Audio Files -->
     <audio id="timer-sound" src="timer.mp3" preload="auto"></audio>
