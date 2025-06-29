@@ -40,7 +40,7 @@
             padding: 20px;
         }
 
-        /* Main container with gold glowing border */
+        /* Main container */
         .quiz-container {
             width: 100%;
             max-width: 1100px;
@@ -186,12 +186,25 @@
             top: 50%;
             left: 50%;
             transform: translate(-50%, -50%);
-            font-size: 15rem;
+            font-size: 15rem; /* This now acts as a container size */
+            width: 15rem; /* Explicit width and height for the container */
+            height: 15rem;
             z-index: 2000;
             pointer-events: none;
             animation: emoji-pop 1.5s ease-in-out forwards;
-            
+            text-shadow: 0 0 20px rgba(255, 255, 0, 0.8);
+            display: flex;
+            justify-content: center;
+            align-items: center;
         }
+        
+        /* --- START: NEW STYLE FOR RASTER EMOJI IMAGE --- */
+        .emoji-popup img {
+            width: 100%;
+            height: 100%;
+            object-fit: contain; /* Ensures the image scales properly */
+        }
+        /* --- END: NEW STYLE FOR RASTER EMOJI IMAGE --- */
 
         .mobile-controls-panel {
             display: none;
@@ -226,12 +239,11 @@
             box-shadow: 0 0 10px var(--cyan-glow);
         }
 
-        /* Keyframe animations */
-        @keyframes glow-gold { from { box-shadow: 0 0 10px var(--gold-glow), 0 0 20px var(--gold-glow); } to { box-shadow: 0 0 20px var(--gold-glow), 0 0 30px var(--gold-glow); } }
-        @keyframes glow-red { from { box-shadow: 0 0 10px var(--red-glow), 0 0 20px var(--red-glow); } to { box-shadow: 0 0 20px var(--red-glow), 0 0 30px var(--red-glow); } }
-        @keyframes glow-purple { from { box-shadow: 0 0 10px var(--purple-glow), 0 0 20px var(--purple-glow); } to { box-shadow: 0 0 20px var(--purple-glow), 0 0 30px var(--purple-glow); } }
-        @keyframes glow-green { from { box-shadow: 0 0 10px var(--green-glow), 0 0 20px var(--green-glow); } to { box-shadow: 0 0 20px var(--green-glow), 0 0 30px var(--green-glow); } }
-        @keyframes glow-cyan { from { box-shadow: 0 0 20px var(--cyan-glow), 0 0 30px var(--cyan-glow); } to { box-shadow: 0 0 30px var(--cyan-glow), 0 0 45px var(--cyan-glow); } }
+        @keyframes glow-gold { from { box-shadow: 0 0 10px var(--gold-glow); } to { box-shadow: 0 0 20px var(--gold-glow); } }
+        @keyframes glow-red { from { box-shadow: 0 0 10px var(--red-glow); } to { box-shadow: 0 0 20px var(--red-glow); } }
+        @keyframes glow-purple { from { box-shadow: 0 0 10px var(--purple-glow); } to { box-shadow: 0 0 20px var(--purple-glow); } }
+        @keyframes glow-green { from { box-shadow: 0 0 10px var(--green-glow); } to { box-shadow: 0 0 20px var(--green-glow); } }
+        @keyframes glow-cyan { from { box-shadow: 0 0 20px var(--cyan-glow); } to { box-shadow: 0 0 30px var(--cyan-glow); } }
 
         @keyframes emoji-pop {
             0% { transform: translate(-50%, -50%) scale(0); opacity: 0; }
@@ -240,34 +252,13 @@
             100% { transform: translate(-50%, -50%) scale(0); opacity: 0; }
         }
 
-        /* MEDIA QUERY FOR MOBILE DEVICES */
         @media (max-width: 768px) {
-            .quiz-container {
-                padding: 20px 15px;
-                margin-bottom: 100px;
-            }
-
-            .question-box {
-                font-size: 2.2rem;
-                min-height: 150px;
-            }
-
-            .answer-box {
-                font-size: 1.8rem;
-                width: 70%;
-            }
-
+            .quiz-container { padding: 20px 15px; margin-bottom: 100px; }
+            .question-box { font-size: 2.2rem; min-height: 150px; }
+            .answer-box { font-size: 1.8rem; width: 70%; }
             .header { font-size: 0.9rem; }
-            
-            /* --- START: HIDE ORIGINAL NEXT BUTTON ON MOBILE --- */
-            #next-btn {
-                display: none;
-            }
-            /* --- END: HIDE ORIGINAL NEXT BUTTON ON MOBILE --- */
-
-            .mobile-controls-panel {
-                display: flex;
-            }
+            #next-btn { display: none; }
+            .mobile-controls-panel { display: flex; }
         }
     </style>
 </head>
@@ -308,17 +299,16 @@
         <button id="mobile-next-btn">Next ➡️</button>
     </div>
 
-    <!-- Audio Files -->
     <audio id="timer-sound" src="timer.mp3" preload="auto"></audio>
     <audio id="answer-sound" src="ans_show.mp3" preload="auto"></audio>
     <audio id="next-question-sound" src="next_question.mp3" preload="auto"></audio>
     <audio id="background-music" src="" preload="auto"></audio>
     <audio id="continuous-bg-music" src="background.mp3" loop preload="auto"></audio>
 
-
     <script>
         document.addEventListener('DOMContentLoaded', () => {
 
+            // --- START: UPDATED QUIZ DATA WITH EMOJI IMAGE NAMES ---
             const quizData = [
                 { question: "ଗଛ ନୁହେଁ କିନ୍ତୁ ପତ୍ର ଅଛି, ମଣିଷ ନୁହେଁ କିନ୍ତୁ କଥା କହେ। ସେ କିଏ?", answer: "ବହି 📖", emoji: "📖" },
                 { question: "ଲାଲ୍ ଗୁମ୍ଫା ଭିତରେ ବତିଶଟି ଧଳା ସିପାହୀ। ସେମାନେ କିଏ?", answer: "ଦାନ୍ତ 🦷", emoji: "🦷" },
@@ -421,15 +411,12 @@
                 { question: "ଗୋଟିଏ ଗଛରେ ଦୁଇଟି ଫୁଲ, ଗୋଟିଏ ଗରମ ଆଉ ଗୋଟିଏ ଥଣ୍ଡା। ସେମାନେ କିଏ?", answer: "ସୂର୍ଯ୍ୟ ଓ ଚନ୍ଦ୍ର ☀️🌙", emoji: "🌙" },
                 { question: "ମୁଁ ଏକ ଶବ୍ଦ, ମୋତେ ଓଲଟାଇଲେ ମୁଁ ଏକ ଶକ୍ତି। ମୁଁ କିଏ?", answer: "ନଦୀ (ଦିନ) 🌊➡️☀️", emoji: "🌊" }
             ];
+            // --- END: UPDATED QUIZ DATA ---
 
             const funnyVideoFiles = [];
-            for (let i = 1; i <= 15; i++) {
-                funnyVideoFiles.push(`video${i}.mp4`);
-            }
+            for (let i = 1; i <= 15; i++) { funnyVideoFiles.push(`video${i}.mp4`); }
             const funnyMusicFiles = [];
-            for (let i = 1; i <= 5; i++) {
-                funnyMusicFiles.push(`funny${i}.mp3`);
-            }
+            for (let i = 1; i <= 5; i++) { funnyMusicFiles.push(`funny${i}.mp3`); }
 
             const questionBox = document.getElementById('question-box');
             const answerBox = document.getElementById('answer-box');
@@ -439,13 +426,11 @@
             const nextBtn = document.getElementById('next-btn');
             const videoOverlay = document.getElementById('video-overlay');
             const funnyVideo = document.getElementById('funny-video');
-
             const mobileTimerBtn = document.getElementById('mobile-timer-btn');
             const mobileEmojiBtn = document.getElementById('mobile-emoji-btn');
             const mobileVideoBtn = document.getElementById('mobile-video-btn');
             const mobileSoundBtn = document.getElementById('mobile-sound-btn');
             const mobileNextBtn = document.getElementById('mobile-next-btn');
-
             const timerSound = document.getElementById('timer-sound');
             const answerSound = document.getElementById('answer-sound');
             const nextQuestionSound = document.getElementById('next-question-sound');
@@ -458,13 +443,8 @@
             let isTimerActive = false;
             let availableVideos = [];
 
-            function getRandomInt(max) {
-                return Math.floor(Math.random() * max);
-            }
-
-            function resetVideoList() {
-                availableVideos = [...funnyVideoFiles];
-            }
+            function getRandomInt(max) { return Math.floor(Math.random() * max); }
+            function resetVideoList() { availableVideos = [...funnyVideoFiles]; }
 
             function loadQuestion() {
                 resetState();
@@ -493,9 +473,7 @@
 
             function startTimer() {
                 if (isTimerActive || currentQuestionIndex >= quizData.length) return;
-                
                 stopEventSounds();
-                
                 isTimerActive = true;
                 countdown = 5;
                 timerDisplay.textContent = countdown;
@@ -518,35 +496,41 @@
                 playSound(answerSound);
             }
             
-            function playSound(sound) {
-                sound.load(); 
-                sound.play().catch(e => console.error("Audio play failed.", e));
-            }
-
-            function stopSound(sound) {
-                sound.pause();
-                sound.currentTime = 0;
-            }
-
+            function playSound(sound) { sound.load(); sound.play().catch(e => console.error("Audio play failed.", e)); }
+            function stopSound(sound) { sound.pause(); sound.currentTime = 0; }
             function stopEventSounds() {
                 stopSound(timerSound);
                 stopSound(answerSound);
                 stopSound(nextQuestionSound);
                 stopSound(backgroundMusic);
             }
-
+            
+            // --- START: UPDATED EMOJI POPUP FUNCTION ---
             function triggerEmojiPopup() {
                 playSound(nextQuestionSound);
-                const currentEmoji = quizData[currentQuestionIndex].emoji;
-                if (!currentEmoji) return; 
+                const currentQuestion = quizData[currentQuestionIndex];
+                if (!currentQuestion) return;
+
                 const existingPopup = document.querySelector('.emoji-popup');
                 if (existingPopup) { existingPopup.remove(); }
+                
                 const emojiPopup = document.createElement('div');
                 emojiPopup.classList.add('emoji-popup');
-                emojiPopup.innerHTML = currentEmoji;
+                
+                const isMobile = window.matchMedia("(max-width: 768px)").matches;
+
+                // On mobile, show the high-quality image. Otherwise, show text emoji.
+                if (isMobile && currentQuestion.emoji_image_name) {
+                    const imageUrl = `https://twemoji.maxcdn.com/v/latest/svg/${currentQuestion.emoji_image_name}.svg`;
+                    emojiPopup.innerHTML = `<img src="${imageUrl}" alt="${currentQuestion.answer}">`;
+                } else {
+                    emojiPopup.innerHTML = currentQuestion.emoji;
+                }
+
                 document.body.appendChild(emojiPopup);
-                setTimeout(() => { emojiPopup.remove(); }, 1500); 
+                setTimeout(() => { emojiPopup.remove(); }, 1500);
             }
+            // --- END: UPDATED EMOJI POPUP FUNCTION ---
 
             function triggerVideo() {
                 stopEventSounds();
@@ -596,18 +580,8 @@
 
             document.addEventListener('keydown', (event) => {
                 const key = event.key.toLowerCase(); 
-                if (key === 't') {
-                    event.preventDefault(); 
-                    timerCircle.classList.add('active-pulse');
-                    startTimer();
-                    setTimeout(() => { timerCircle.classList.remove('active-pulse'); }, 300);
-                } 
-                else if (key === 'n') {
-                    event.preventDefault();
-                    nextBtn.classList.add('active-pulse');
-                    nextBtn.click(); 
-                    setTimeout(() => { nextBtn.classList.remove('active-pulse'); }, 300);
-                }
+                if (key === 't') { event.preventDefault(); timerCircle.classList.add('active-pulse'); startTimer(); setTimeout(() => { timerCircle.classList.remove('active-pulse'); }, 300); } 
+                else if (key === 'n') { event.preventDefault(); nextBtn.classList.add('active-pulse'); nextBtn.click(); setTimeout(() => { nextBtn.classList.remove('active-pulse'); }, 300); }
                 else if (key === 'u') { event.preventDefault(); triggerEmojiPopup(); }
                 else if (key === 'v') { event.preventDefault(); triggerVideo(); }
                 else if (key === 'f') { event.preventDefault(); triggerFunnySound(); }
