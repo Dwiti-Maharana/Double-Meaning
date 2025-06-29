@@ -186,8 +186,8 @@
             top: 50%;
             left: 50%;
             transform: translate(-50%, -50%);
-            font-size: 15rem; /* This now acts as a container size */
-            width: 15rem; /* Explicit width and height for the container */
+            font-size: 15rem;
+            width: 15rem;
             height: 15rem;
             z-index: 2000;
             pointer-events: none;
@@ -197,13 +197,11 @@
             align-items: center;
         }
         
-        /* --- START: NEW STYLE FOR RASTER EMOJI IMAGE --- */
         .emoji-popup img {
             width: 100%;
             height: 100%;
-            object-fit: contain; /* Ensures the image scales properly */
+            object-fit: contain;
         }
-        /* --- END: NEW STYLE FOR RASTER EMOJI IMAGE --- */
 
         .mobile-controls-panel {
             display: none;
@@ -251,14 +249,31 @@
             100% { transform: translate(-50%, -50%) scale(0); opacity: 0; }
         }
 
+        /* --- START: UPDATED MEDIA QUERY FOR MOBILE DEVICES --- */
         @media (max-width: 768px) {
-            .quiz-container { padding: 20px 15px; margin-bottom: 100px; }
+            .quiz-container { 
+                padding: 20px 15px; 
+                margin-bottom: 100px; 
+            }
             .question-box { font-size: 2.2rem; min-height: 150px; }
-            .answer-box { font-size: 1.8rem; width: 70%; }
-            .header { font-size: 0.9rem; }
-            #next-btn { display: none; }
-            .mobile-controls-panel { display: flex; }
+            .answer-box { font-size: 1.8rem; width: 80%; }
+            
+            .header { 
+                justify-content: center; /* Center the remaining items */
+            }
+
+            /* Hide unwanted elements on mobile */
+            #next-btn,
+            .header .title,
+            #question-counter {
+                display: none;
+            }
+
+            .mobile-controls-panel { 
+                display: flex; 
+            }
         }
+        /* --- END: UPDATED MEDIA QUERY FOR MOBILE DEVICES --- */
     </style>
 </head>
 <body>
@@ -307,7 +322,6 @@
     <script>
         document.addEventListener('DOMContentLoaded', () => {
 
-            // --- START: UPDATED QUIZ DATA WITH EMOJI IMAGE NAMES ---
             const quizData = [
                 { question: "ଗଛ ନୁହେଁ କିନ୍ତୁ ପତ୍ର ଅଛି, ମଣିଷ ନୁହେଁ କିନ୍ତୁ କଥା କହେ। ସେ କିଏ?", answer: "ବହି 📖", emoji: "📖" },
                 { question: "ଲାଲ୍ ଗୁମ୍ଫା ଭିତରେ ବତିଶଟି ଧଳା ସିପାହୀ। ସେମାନେ କିଏ?", answer: "ଦାନ୍ତ 🦷", emoji: "🦷" },
@@ -410,7 +424,6 @@
                 { question: "ଗୋଟିଏ ଗଛରେ ଦୁଇଟି ଫୁଲ, ଗୋଟିଏ ଗରମ ଆଉ ଗୋଟିଏ ଥଣ୍ଡା। ସେମାନେ କିଏ?", answer: "ସୂର୍ଯ୍ୟ ଓ ଚନ୍ଦ୍ର ☀️🌙", emoji: "🌙" },
                 { question: "ମୁଁ ଏକ ଶବ୍ଦ, ମୋତେ ଓଲଟାଇଲେ ମୁଁ ଏକ ଶକ୍ତି। ମୁଁ କିଏ?", answer: "ନଦୀ (ଦିନ) 🌊➡️☀️", emoji: "🌊" }
             ];
-            // --- END: UPDATED QUIZ DATA ---
 
             const funnyVideoFiles = [];
             for (let i = 1; i <= 15; i++) { funnyVideoFiles.push(`video${i}.mp4`); }
@@ -450,6 +463,8 @@
                 if (currentQuestionIndex < quizData.length) {
                     const currentQuestion = quizData[currentQuestionIndex];
                     questionBox.textContent = currentQuestion.question;
+                    answerBox.innerHTML = 'ଉତ୍ତର?'; // Use innerHTML to handle potential emojis in answers
+                    answerBox.classList.remove('answer-revealed');
                     questionCounter.textContent = `Question ${currentQuestionIndex + 1}/${quizData.length}`;
                 } else {
                     questionBox.textContent = "Quiz Completed!";
@@ -490,7 +505,7 @@
 
             function showAnswer() {
                 const currentAnswer = quizData[currentQuestionIndex].answer;
-                answerBox.textContent = currentAnswer;
+                answerBox.innerHTML = currentAnswer; // Use innerHTML to render emojis in the answer
                 answerBox.classList.add('answer-revealed');
                 playSound(answerSound);
             }
@@ -504,11 +519,10 @@
                 stopSound(backgroundMusic);
             }
             
-            // --- START: UPDATED EMOJI POPUP FUNCTION ---
             function triggerEmojiPopup() {
                 playSound(nextQuestionSound);
                 const currentQuestion = quizData[currentQuestionIndex];
-                if (!currentQuestion) return;
+                if (!currentQuestion || !currentQuestion.emoji) return;
 
                 const existingPopup = document.querySelector('.emoji-popup');
                 if (existingPopup) { existingPopup.remove(); }
@@ -518,7 +532,6 @@
                 
                 const isMobile = window.matchMedia("(max-width: 768px)").matches;
 
-                // On mobile, show the high-quality image. Otherwise, show text emoji.
                 if (isMobile && currentQuestion.emoji_image_name) {
                     const imageUrl = `https://twemoji.maxcdn.com/v/latest/svg/${currentQuestion.emoji_image_name}.svg`;
                     emojiPopup.innerHTML = `<img src="${imageUrl}" alt="${currentQuestion.answer}">`;
@@ -529,7 +542,6 @@
                 document.body.appendChild(emojiPopup);
                 setTimeout(() => { emojiPopup.remove(); }, 1500);
             }
-            // --- END: UPDATED EMOJI POPUP FUNCTION ---
 
             function triggerVideo() {
                 stopEventSounds();
